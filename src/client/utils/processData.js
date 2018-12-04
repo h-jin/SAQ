@@ -11,6 +11,15 @@ const getSearchCriteria = productList => {
     return values;
 }
 
+const constructQueries = criteria =>{
+    const queries = Object.entries(criteria).map(val=>{
+        const fieldName = val[0];
+        const query = val[1].reduce((acc, cur)=>(`${acc}${acc==""?"":" OR "}@${fieldName}==${cur}`), "");
+        return query;
+    }).reduce((acc, cur)=>(`${acc} ${cur}`));
+    return queries;
+}
 export {
-    getSearchCriteria
+    getSearchCriteria,
+    constructQueries
 }

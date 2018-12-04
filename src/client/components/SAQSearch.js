@@ -14,6 +14,11 @@ export default class SAQSearch extends Component {
         const { dispatch } = this.props;
         dispatch({ type: "FETCH_ALL" });
     }
+    onSelectCriteria = (checkedValue, category) =>{
+        const { dispatch } = this.props;
+        dispatch({ type: "UPDATE_CRITERIA", payload: {[`tp${category.toLowerCase()}`]: checkedValue} });
+        dispatch({ type: "FETCH_FILTERED_PRODUCTS" });
+    }
     render() {
         const { productList } = this.props;
         console.log(productList);
@@ -36,7 +41,13 @@ export default class SAQSearch extends Component {
                 <Content style={{ padding: '0 50px' }}>
                     <Row type="flex">
                         <Col xs={6} sm={6} md={6} lg={6} xl={6}>
-                            {productList.results&&<SAQSearchBar criteria={getSearchCriteria(productList.results)}/>}
+                            {
+                                productList.results&&
+                                    <SAQSearchBar 
+                                        criteria={getSearchCriteria(productList.results)}
+                                        onSelectCriteria={this.onSelectCriteria}
+                                    />
+                            }
                         </Col>
                         <Col xs={18} sm={18} md={18} lg={18} xl={18}>
                             <Row type="flex">

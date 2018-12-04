@@ -5,15 +5,16 @@ import '../app.css';
 
 const Panel = Collapse.Panel;
 
-const SAQSearchBar= ({criteria})=>{
+const SAQSearchBar= ({criteria, onSelectCriteria})=>{ 
+    console.log(criteria);
     return (
         <Collapse defaultActiveKey={['0']}>
             {Object.entries(criteria).map((val,index)=>(
-                 <Panel header={val[0]} key={index}>
-                    <Checkbox.Group style={{ width: '100%' }}>                       
+                 <Panel header={val[0]} key={index}>  
+                    <Checkbox.Group style={{ width: '100%' }} onChange={e=>onSelectCriteria(e, val[0])}>                       
                         {val[1].map(v=>(
-                            <Row>
-                                <Checkbox key={v4()} value={v}>{v}</Checkbox>
+                            <Row key={v4()}>
+                                <Checkbox value={v}>{v}</Checkbox>
                             </Row>
                         ))}
                     </Checkbox.Group>
