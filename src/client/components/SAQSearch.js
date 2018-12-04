@@ -3,7 +3,6 @@ import { Layout, Input, Row, Col  } from 'antd';
 import {v4} from "uuid"; 
 import SAQCard from "./SAQCard";
 import SAQSearchBar from "./SAQSearchBar";
-import { getSearchCriteria } from "utils/processData";
 import '../app.css';
 
 const { Header, Content } = Layout;
@@ -19,9 +18,17 @@ export default class SAQSearch extends Component {
         dispatch({ type: "UPDATE_CRITERIA", payload: {[`tp${category.toLowerCase()}`]: checkedValue} });
         dispatch({ type: "FETCH_FILTERED_PRODUCTS" });
     }
+    onSelecRecommandation = e => { // call intelligent recommdantion API
+        const { dispatch } = this.props;
+        dispatch({ type: `FETCH_${e.target.value.toUpperCase()}` });
+    }
+    onSearch = value => {
+        console.log(value);
+        const { dispatch } = this.props;
+        dispatch({ type: "FETCH_SEARCHED_PRODUCTS", payload: value });
+    }
     render() {
-        const { productList } = this.props;
-        console.log(productList);
+        const { productList, allCriteria } = this.props;
         return (
             <Layout>
                 <Header>
@@ -32,7 +39,7 @@ export default class SAQSearch extends Component {
                         <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                             <Search
                                 placeholder="search"
-                                onSearch={value => console.log(value)}
+                                onSearch={this.onSearch}
                                 enterButton
                             />
                         </Col>
@@ -44,16 +51,20 @@ export default class SAQSearch extends Component {
                             {
                                 productList.results&&
                                     <SAQSearchBar 
-                                        criteria={getSearchCriteria(productList.results)}
+                                        criteria={allCriteria}
                                         onSelectCriteria={this.onSelectCriteria}
+                                        onSelecRecommandation={this.onSelecRecommandation}
                                     />
                             }
                         </Col>
                         <Col xs={18} sm={18} md={18} lg={18} xl={18}>
                             <Row type="flex">
-                                {productList.results&&productList.results.map(product=>(
-                                        <SAQCard key={v4()} product={product}/>
-                                ))}
+                                {
+                                    productList.results&&productList.results.length>0? 
+                                        productList.results.map(product=>(
+                                            <SAQCard key={v4()} product={product}/>
+                                    )): <h2>No Products found.</h2>
+                                }
                             </Row>
                         </Col>
                     </Row>

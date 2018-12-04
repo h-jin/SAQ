@@ -1,11 +1,12 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects'
 import request from "utils/request.js";
-import { constructQueries } from "utils/processData.js";
+import { constructQueries, getSearchCriteria } from "utils/processData.js";
 
 function* fetchAllProducts(action) {
     yield takeEvery("FETCH_ALL", function* (action) {
         const allProducts = yield call(request, { url: "https://cloudplatform.coveo.com/rest/search?access_token=058c85fd-3c79-42a3-9236-b83d35588103" });
-        yield put({ type: "FETCH_PRODUCTS", payload: allProducts });
+        const allCriteria = getSearchCriteria(allProducts.results);
+        yield put({ type: "FETCH_ALL_PRODUCTS", payload: { allProducts, allCriteria } });
     });
 }
 function* fetchProducts(action){
@@ -17,7 +18,31 @@ function* fetchProducts(action){
     });
 }
 
+function* fetchSearchedProducts(action){
+    yield takeEvery("FETCH_SEARCHED_PRODUCTS", function* (action) {
+        const keyWords = action.payload;
+        const escapedKeyWords = keyWords.replace(/[^0-9a-z]/gi, ' ');
+        const searchedProducts = yield call(request, { url: `https://cloudplatform.coveo.com/rest/search?access_token=058c85fd-3c79-42a3-9236-b83d35588103&q=${escapedKeyWords}` });
+        yield put({ type: "FETCH_PRODUCTS", payload: searchedProducts });
+    });
+}
+
+// image we have an intelligent recommandation API, by making use of machine learning skills, we recommend products to users with similar profiles
+
+function* fetchIntelligentRecommandatedProducts(action){
+    yield takeEvery("FETCH_DATE", function* (action) {
+        const filteredProducts = yield call(request, { url: `https://cloudplatform.coveo.com/rest/search?access_token=058c85fd-3c79-42a3-9236-b83d35588103&q=Bière%20rousse` });
+        yield put({ type: "FETCH_PRODUCTS", payload: filteredProducts });
+    });
+    yield takeEvery("FETCH_ANNIVERSARY", function* (action) {
+        const filteredProducts = yield call(request, { url: `https://cloudplatform.coveo.com/rest/search?access_token=058c85fd-3c79-42a3-9236-b83d35588103&q=@tpcepagenomsplitgroup==Merlot` });
+        yield put({ type: "FETCH_PRODUCTS", payload: filteredProducts });
+    });
+}
+
 export {
     fetchAllProducts,
-    fetchProducts
+    fetchProducts,
+    fetchIntelligentRecommandatedProducts,
+    fetchSearchedProducts
 }
