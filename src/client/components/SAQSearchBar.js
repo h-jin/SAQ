@@ -11,7 +11,7 @@ const SAQSearchBar= ({criteria, onSelectCriteria, onSelecRecommandation })=>{
             <Panel header="Intelligent Recommandation" key="intelligent">  
                 <Radio.Group onChange={onSelecRecommandation}>
                     <Radio value="date">First Date</Radio>
-                    <Radio value="anniversary">Aniversary</Radio>
+                    <Radio value="anniversary">Anniversary</Radio>
                 </Radio.Group>
             </Panel>
             

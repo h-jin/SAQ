@@ -1,3 +1,5 @@
+// you probably need local server to use some fake data to test your frontend functionality
+
 const express = require('express');
 const os = require('os');
 
