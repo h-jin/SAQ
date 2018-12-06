@@ -49,7 +49,7 @@ export default class SAQSearch extends Component {
                     <Row type="flex">
                         <Col xs={6} sm={6} md={6} lg={6} xl={6}>
                             {
-                                productList.results&&
+                                productList &&
                                     <SAQSearchBar 
                                         criteria={allCriteria}
                                         onSelectCriteria={this.onSelectCriteria}
@@ -60,7 +60,7 @@ export default class SAQSearch extends Component {
                         <Col xs={18} sm={18} md={18} lg={18} xl={18}>
                             <Row type="flex">
                                 {
-                                    productList.results&&productList.results.length>0? 
+                                    productList && productList.results && productList.results.length>0? 
                                         productList.results.map(product=>(
                                             <SAQCard key={v4()} product={product}/>
                                     )): <h2>No Products found.</h2>

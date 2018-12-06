@@ -4,7 +4,7 @@ import '../app.css';
 
 const { Meta } = Card;
 const SAQCard = ({product})=>{
-    const {Title, ClickUri, Excerpt, raw:{tpthumbnailuri}} = product;
+    const {Title, ClickUri, Excerpt, raw:{tpthumbnailuri}} = product || {raw:{}};
     return (
         <a href={ClickUri} target="_blank">
             <Card

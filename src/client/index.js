@@ -17,4 +17,4 @@ ReactDOM.render(
     </Provider>,
     MOUNT_NODE);
 
-window.store = store;
+//window.store = store;
